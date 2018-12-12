@@ -25,3 +25,13 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    cfgs = [
+            compileVersion   : "$android_compile" as int,
+            compileMinSupport: "$compile_support" as int,
+            compileTarget    : "$compile_target" as int,
+            versionCode      : "$lib_version" as int,
+            versionName      : "$lib_ver_name",
+    ]
+}

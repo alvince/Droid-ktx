@@ -23,19 +23,80 @@
 package me.alvince.android.droidktx.core
 
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Point
+import android.graphics.drawable.Drawable
 import android.os.Build
+import android.util.TypedValue
+import android.view.WindowManager
 
-fun Context.string(res: Int, vararg formatArgs: Any) =
+fun Context.string(res: Int, vararg formatArgs: Any): String =
     if (formatArgs.isNotEmpty()) {
         getString(res, formatArgs)
     } else {
         getString(res)
-    }
+    } ?: ""
 
 
 fun Context.color(res: Int) =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         getColor(res)
     } else {
+        @Suppress("DEPRECATION")
         resources.getColor(res)
     }
+
+fun Context.drawable(res: Int): Drawable? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        getDrawable(res)
+    } else {
+        @Suppress("DEPRECATION")
+        resources.getDrawable(res)
+    }
+
+fun Context.drawableViaAttrs(attrRes: Int): Drawable? {
+    val attrsArray = intArrayOf(attrRes)
+    val typedArray = obtainStyledAttributes(attrsArray)
+    val drawable = typedArray.getDrawable(0)
+    typedArray.recycle()
+    return drawable
+}
+
+/**
+ * Convert dimensions in pixel from dip
+ */
+fun Context?.fromDp(dip: Float): Int =
+    (this?.resources ?: Resources.getSystem()).displayMetrics
+        .let {
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, it).toInt()
+        }
+
+/**
+ * Convert dimensions in pixel from sp
+ */
+fun Context?.fromSp(sp: Float): Int =
+    (this?.resources ?: Resources.getSystem()).displayMetrics
+        .let {
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, it).toInt()
+        }
+
+/**
+ * Obtain system-ui action bar height
+ */
+fun Context.actionBarSize() = let {
+    val tv = TypedValue()
+    theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)
+    TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+}
+
+/**
+ * Obtain window size
+ */
+fun Context.getWindowSize(): Point = let {
+    val out = Point()
+    (getSystemService(Context.WINDOW_SERVICE) as? WindowManager)
+        ?.apply {
+            defaultDisplay.getSize(out)
+        }
+    out
+}

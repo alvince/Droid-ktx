@@ -34,6 +34,11 @@ import android.widget.TextView
 fun View.detachParent() = parent?.let { it as? ViewGroup }?.also { it.removeView(this) }
 
 /**
+ * Check if current visible to user
+ */
+fun View.isVisible() = isShown || visibility == View.VISIBLE
+
+/**
  * Toggle [View]'s visibility
  */
 fun View.visible(visible: Boolean = true) {
@@ -53,6 +58,27 @@ fun View.visible(visible: Boolean = true) {
 fun View.gone() {
     if (visibility != View.GONE) {
         visibility = View.GONE
+    }
+}
+
+/**
+ * Register click callback via lambda expression
+ *
+ * @see View.setOnClickListener
+ */
+fun View.onClick(listener: View.OnClickListener?) = setOnClickListener(listener)
+
+/**
+ * Register click callback with delayed consoled
+ *
+ * @param delayed click delayed in millis seconds
+ * @param block click handler expression
+ */
+fun View.onClick(delayed: Long = 0, block: (View) -> Unit) {
+    if (delayed > 0) {
+        setOnClickListener(ClickDelayed(delayed, block))
+    } else {
+        setOnClickListener { block(it) }
     }
 }
 
@@ -79,4 +105,20 @@ fun View.toggleSoftInput(show: Boolean) {
  */
 fun TextView.text(trim: Boolean = true) = this.text.toString().let { if (trim) it.trim() else it }
 
+/**
+ * [View.OnClickListener] wrapper with delayed
+ */
+internal class ClickDelayed(private val delayed: Long, private val callback: (View) -> Unit) : View.OnClickListener {
 
+    private var lastHandleClicked: Long = 0
+
+    override fun onClick(v: View?) {
+        v ?: return
+
+        val curTime = System.currentTimeMillis()
+        if (curTime.minus(lastHandleClicked) >= delayed) {
+            lastHandleClicked = curTime
+            callback.invoke(v)
+        }
+    }
+}
