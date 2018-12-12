@@ -29,3 +29,32 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+
+version = cfgs.versionName
+group = "$maven_group"
+
+ext {
+    bintrayRepo = 'android'
+    bintrayName = 'android-ktx-core'
+
+    group_id = 'me.alvince.android'
+    artifact = 'droid-ktx-core'
+
+    libraryName = 'Droid-ktx'
+    libraryVersion = '0.1'
+    libraryDescription = 'Simple and Modular android-kotlin extensions library'
+    siteUrl = 'https://github.com/alvince/Droid-ktx'
+    gitUrl = 'https://github.com/alvince/Droid-ktx.git'
+    revisionTag = '0.1'
+
+    developerId = 'alvince-zy'
+    developerName = 'alvince'
+    developerEmail = 'alvince.zy@gmail.com'
+
+    licenseName = 'MIT License'
+    licenseUrl = 'https://choosealicense.com/licenses/mit/'
+    allLicenses = ['MIT']
+}
+
+apply from: '../gradle/mvnInstall.gradle'
+apply from: '../gradle/bintrayUpload.gradle'

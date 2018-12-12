@@ -8,11 +8,15 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
+}
+
+plugins {
+    id "com.github.dcendents.android-maven" version "2.1"
+    id "com.jfrog.bintray" version "1.8.3"
 }
 
 allprojects {
@@ -22,16 +26,13 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
 ext {
     cfgs = [
             compileVersion   : "$android_compile" as int,
             compileMinSupport: "$compile_support" as int,
             compileTarget    : "$compile_target" as int,
-            versionCode      : "$lib_version" as int,
-            versionName      : "$lib_ver_name",
+            versionCode      : "$version_code" as int,
+            versionName      : "$version_name",
     ]
+    buildPublish = Boolean.parseBoolean("$build_publish")
 }

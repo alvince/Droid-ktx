@@ -28,5 +28,41 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api project(':support_core')
+
+    if (rootProject.ext.buildPublish) {
+        System.out.println("Build in publish")
+        api "me.alvince.android:droid-ktx-core:0.1"
+    } else {
+        System.out.println("Build in develop")
+        api project(':support_core')
+    }
 }
+
+version = cfgs.versionName
+group = "$maven_group"
+
+ext {
+    bintrayRepo = 'android'
+    bintrayName = 'android-ktx-commons'
+
+    group_id = 'me.alvince.android'
+    artifact = 'droid-ktx-commons'
+
+    libraryName = 'Droid-ktx'
+    libraryVersion = '0.1'
+    libraryDescription = 'Simple and Modular android-kotlin extensions library'
+    siteUrl = 'https://github.com/alvince/Droid-ktx'
+    gitUrl = 'https://github.com/alvince/Droid-ktx.git'
+    revisionTag = '0.1'
+
+    developerId = 'alvince-zy'
+    developerName = 'alvince'
+    developerEmail = 'alvince.zy@gmail.com'
+
+    licenseName = 'MIT License'
+    licenseUrl = 'https://choosealicense.com/licenses/mit/'
+    allLicenses = ['MIT']
+}
+
+apply from: '../gradle/mvnInstall.gradle'
+apply from: '../gradle/bintrayUpload.gradle'
