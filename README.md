@@ -3,7 +3,21 @@ Droid KTX Library
 
 Simple and Modular android-kotlin extensions library
 
-## License
+## Depends
+
+```Groovy
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'me.alvince.android:droid-ktx-core:0.1.1'
+    implementation 'me.alvince.android:droid-ktx-commons:0.1.1'
+}
+```
+
+License
+---
 
 ```
 MIT License

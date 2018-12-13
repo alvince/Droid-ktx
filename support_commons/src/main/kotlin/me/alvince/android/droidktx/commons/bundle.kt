@@ -23,6 +23,32 @@
 package me.alvince.android.droidktx.commons
 
 import android.os.Bundle
+import android.os.Parcelable
+import android.util.Log
+import java.io.Serializable
+
+fun ofBundle(map: Map<String, *>): Bundle {
+    val bundle = Bundle()
+    map.asIterable().forEach {
+        val v = it.value
+        when (v) {
+            is Boolean -> bundle.putBoolean(it.key, v)
+            is String -> bundle.putString(it.key, v)
+            is CharSequence -> bundle.putCharSequence(it.key, v)
+            is Char -> bundle.putChar(it.key, v)
+            is Byte -> bundle.putByte(it.key, v)
+            is Short -> bundle.putShort(it.key, v)
+            is Int -> bundle.putInt(it.key, v)
+            is Long -> bundle.putLong(it.key, v)
+            is Float -> bundle.putFloat(it.key, v)
+            is Double -> bundle.putDouble(it.key, v)
+            is Serializable -> bundle.putSerializable(it.key, v)
+            is Parcelable -> bundle.putParcelable(it.key, v)
+            else -> Log.e("Droid-ktx", "No support this value's type of key: ${it.key}")
+        }
+    }
+    return bundle
+}
 
 fun Bundle?.printPretty(): String {
     this ?: return ""

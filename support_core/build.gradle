@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion cfgs.compileVersion
@@ -6,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion cfgs.compileMinSupport
         targetSdkVersion cfgs.compileTarget
-        versionCode cfgs.versionCode
-        versionName cfgs.versionName
+        versionCode "$lib_core_ver_code" as int
+        versionName "$lib_core_version"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -30,7 +31,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-version = cfgs.versionName
+def lib_version = "$lib_core_version"
+
+version = lib_version
 group = "$maven_group"
 
 ext {
@@ -40,12 +43,12 @@ ext {
     group_id = 'me.alvince.android'
     artifact = 'droid-ktx-core'
 
-    libraryName = 'Droid-ktx'
-    libraryVersion = '0.1'
+    libraryName = 'Droid-ktx-core'
+    libraryVersion = lib_version
     libraryDescription = 'Simple and Modular android-kotlin extensions library'
-    siteUrl = 'https://github.com/alvince/Droid-ktx'
+    siteUrl = 'https://github.com/alvince/Droid-ktx/support_core'
     gitUrl = 'https://github.com/alvince/Droid-ktx.git'
-    revisionTag = '0.1'
+    revisionTag = cfgs.versionName
 
     developerId = 'alvince-zy'
     developerName = 'alvince'
